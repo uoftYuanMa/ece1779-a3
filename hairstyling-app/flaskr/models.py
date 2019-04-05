@@ -1,5 +1,9 @@
 import boto3
+
+import time
+from boto3.dynamodb.conditions import Key, Attr
 import datetime
+
 
 dynamodb = boto3.resource('dynamodb')
 
@@ -17,6 +21,13 @@ class CustomerTable:
         if 'Item' in response:
             customer = response['Item']
         return customer
+
+    def get_all_customer(self):
+        response = self.table.scan(
+            TableName="customer"
+        )
+        items = response['Items']
+        return items
 
     def put_customer(self, name, salt, password, usertype):
         customer = {
@@ -44,11 +55,19 @@ class BarberShopTable:
             barbershop = response['Item']
         return barbershop
 
+
+    def get_all_barbershop(self):
+        response = self.table.scan(
+            TableName="barbershop"
+        )
+        items = response['Items']
+        return items
     def get_all(self):
         response = self.table.scan()
         items = None
         if 'Items' in response:
             items = response['Items']
+
         return items
 
     def put_barbershop(self, name, password, title, image, lat, long):
@@ -70,15 +89,28 @@ class ReviewTable:
     table = dynamodb.Table('review')
 
     def get_review_by_barbershop(self, barbershop):
-        response = self.table.get_item(
-            Key={
-                'name': barbershop
-            }
+        # todo query all reviews of a barbershop
+        response = self.table.query(
+            KeyConditionExpression=Key('barbershop').eq(barbershop)
         )
-        review_list = None
-        if 'Item' in response:
-            review_list = response['Item']
-        return review_list
+        items = response['Items']
+        return items
+
+    def scan_review_table(self):
+        response = self.table.scan(
+            TableName="review",
+            ProjectionExpression="barbershop, customer"
+        )
+        items = response['Items']
+        return items
+
+    def get_review_by_barbershop_and_user(self, customer, barbershop):
+        # todo query all reviews of a barbershop
+        response = self.table.query(
+            KeyConditionExpression=Key('barbershop').eq(barbershop) & Key('customer').eq(customer)
+        )
+        items = response['Items']
+        return items
 
     def put_review_by_barbershop(self, customer, barbershop, timestamp, text, rating):
         # todo  to confirm about timestamp????
@@ -89,7 +121,7 @@ class ReviewTable:
             'barbershop': barbershop,
             'timestamp': timestamp,
             'text': text,
-            'rating':rating
+            'rating': rating
         }
         self.table.put_item(
             Item=review
@@ -114,20 +146,31 @@ class ResvTable:
             'customer': customer,
             'barbershop': barbershop,
             'timestamp': timestamp,
-            'expected_time':expected_time,
+            'expected_time': expected_time,
             'price': price,
-            'service_type':service_type
+            'service_type': service_type
         }
         self.table.put_item(
             Item=new_record
         )
 
-    def get_latest_barbershop(self, name):
+    def get_latest_barbershop(self, customer):
         """
         get latest visited(reserved) barbershop
-        :param name: user name
-        :return: barbershop item
+        :param customer: user name
+
         """
+
+#         current_time = (str)((int)(time.time()))
+#         response = self.table.query(
+#             KeyConditionExpression=Key('customer').eq(customer) & Key('expected_time').gt(current_time),
+#             ScanIndexForward=False
+
+#         )
+#         items = response['Items']
+
+#         return items
+
         response = self.table.scan()
 
         latest_barbershop = None
@@ -142,11 +185,25 @@ class ResvTable:
         return latest_barbershop
 
 
+
     def get_reserve_record_by_customer(self, customer):
+
+        response = self.table.scan(
+            TableName="resv"
+        )
+        items = response['Items']
+        return items
+
         # todo return reservation items
-        pass
 
 
     def get_reserve_record_by_barbershop(self, barbershop):
-        # todo return barbershop
-        pass
+
+        response = self.table.query(
+            KeyConditionExpression=Key('barbershop').eq(barbershop),
+            ScanIndexForward=False
+        )
+        items = response['Items']
+        return items
+
+
