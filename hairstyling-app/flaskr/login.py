@@ -7,10 +7,12 @@ import base64
 import uuid
 import traceback
 
+
 def hash_password(salt, password):
     t_sha = hashlib.sha512()
     t_sha.update(str(password + salt).encode('utf-8'))
     return base64.urlsafe_b64encode(t_sha.digest())
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,6 +60,7 @@ def login():
         print(e)
         traceback.print_tb(e.__traceback__)
         return render_template('error.html', msg='something goes wrong~')
+
 
 @app.route('/logout')
 def logout():
