@@ -207,7 +207,7 @@ class ResvTable:
         return items
 
 
-<<<<<<< HEAD
+
 class TrainTable:
     table = dynamodb.Table('train')
 
@@ -241,5 +241,3 @@ class TrainTable:
         )
         items = response['Items']
         return items
-=======
->>>>>>> 01f38530c12c5754b3f57f53caf32039ca612e32
