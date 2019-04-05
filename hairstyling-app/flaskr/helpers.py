@@ -17,7 +17,7 @@ def load_barbershop(dirname):
     for filename in os.listdir(dirname):
         name = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('utf-8')
         password = name
-        title = re.sub('_', ' ', filename)
+        title = re.sub('_', ' ', filename).split('.')[0]
         image = aws.upload_file(dirname, filename)
         lat, lon = get_rand_lat_lon()
 
