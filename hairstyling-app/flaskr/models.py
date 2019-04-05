@@ -174,3 +174,37 @@ class ResvTable:
         items = response['Items']
         return items
 
+
+class TrainTable:
+    table = dynamodb.Table('train')
+
+    def put_train_list(self, review_table_list, customer_list, barber_list):
+        put1 = {
+            'trainid': "1",
+            'list': review_table_list
+        }
+        self.table.put_item(
+            Item=put1
+        )
+        put2 = {
+            'trainid': "2",
+            'list': customer_list
+        }
+        self.table.put_item(
+            Item=put2
+        )
+        put3 = {
+            'trainid': "3",
+            'list': barber_list
+        }
+        self.table.put_item(
+            Item=put3
+        )
+
+    def get_train_list(self,train_list_id):
+        response = self.table.scan(
+            TableName="train",
+            FilterExpression = Attr('trainid').eq(train_list_id)
+        )
+        items = response['Items']
+        return items
