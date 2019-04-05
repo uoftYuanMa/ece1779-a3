@@ -59,10 +59,9 @@ def collb_filter():
 
 #collb_filter()
 
-'''
+
 if __name__ == '__main__':
     schedule.every(60).minutes.do(collb_filter)
     while True:
         schedule.run_pending()
         time.sleep(1)
-'''
