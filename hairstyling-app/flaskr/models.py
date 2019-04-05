@@ -1,6 +1,9 @@
 import boto3
+
 import time
 from boto3.dynamodb.conditions import Key, Attr
+import datetime
+
 
 dynamodb = boto3.resource('dynamodb')
 
@@ -52,14 +55,23 @@ class BarberShopTable:
             barbershop = response['Item']
         return barbershop
 
+
     def get_all_barbershop(self):
         response = self.table.scan(
             TableName="barbershop"
         )
         items = response['Items']
         return items
+    def get_all(self):
+        response = self.table.scan()
+        items = None
+        if 'Items' in response:
+            items = response['Items']
+
+        return items
 
     def put_barbershop(self, name, password, title, image, lat, long):
+
         barbershop = {
             'name': name,
             'password': password,
@@ -102,7 +114,7 @@ class ReviewTable:
 
     def put_review_by_barbershop(self, customer, barbershop, timestamp, text, rating):
         # todo  to confirm about timestamp????
-        reviewid = (str)((int)(time.time()))
+        # reviewid = (str)((int)(time.time()))
         review = {
             'resvid': reviewid,
             'customer': customer,
@@ -128,7 +140,7 @@ class ResvTable:
         :return: null
         """
         # todo what about the timestamp
-        resvid = (str)((int)(time.time()))
+        # resvid = (str)((int)(time.time()))
         new_record = {
             'resvid': resvid,
             'customer': customer,
@@ -148,29 +160,50 @@ class ResvTable:
         :param customer: user name
 
         """
-        current_time = (str)((int)(time.time()))
-        response = self.table.query(
-            KeyConditionExpression=Key('customer').eq(customer) & Key('expected_time').gt(current_time),
-            ScanIndexForward=False
 
-        )
-        items = response['Items']
+#         current_time = (str)((int)(time.time()))
+#         response = self.table.query(
+#             KeyConditionExpression=Key('customer').eq(customer) & Key('expected_time').gt(current_time),
+#             ScanIndexForward=False
 
-        return items
+#         )
+#         items = response['Items']
+
+#         return items
+
+        response = self.table.scan()
+
+        latest_barbershop = None
+        latest_timestamp = -1
+        if 'Items' in response:
+            items = response['Items']
+            for item in items:
+                if item['customer'] == name and latest_timestamp < int(item['timestamp']):
+                    latest_timestamp = int(item['timestamp'])
+                    latest_barbershop = item['barbershop']
+
+        return latest_barbershop
+
+
 
     def get_reserve_record_by_customer(self, customer):
+
         response = self.table.scan(
             TableName="resv"
         )
         items = response['Items']
         return items
 
-    # todo return reservation items
+        # todo return reservation items
+
+
     def get_reserve_record_by_barbershop(self, barbershop):
+
         response = self.table.query(
             KeyConditionExpression=Key('barbershop').eq(barbershop),
             ScanIndexForward=False
         )
         items = response['Items']
         return items
+
 
