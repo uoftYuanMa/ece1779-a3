@@ -1,5 +1,5 @@
 import boto3
-import time
+import datetime
 
 dynamodb = boto3.resource('dynamodb')
 
@@ -44,7 +44,15 @@ class BarberShopTable:
             barbershop = response['Item']
         return barbershop
 
+    def get_all(self):
+        response = self.table.scan()
+        items = None
+        if 'Items' in response:
+            items = response['Items']
+        return items
+
     def put_barbershop(self, name, password, title, image, lat, long):
+
         barbershop = {
             'name': name,
             'password': password,
@@ -74,7 +82,7 @@ class ReviewTable:
 
     def put_review_by_barbershop(self, customer, barbershop, timestamp, text, rating):
         # todo  to confirm about timestamp????
-        reviewid = (str)((int)(time.time()))
+        # reviewid = (str)((int)(time.time()))
         review = {
             'resvid': reviewid,
             'customer': customer,
@@ -86,7 +94,6 @@ class ReviewTable:
         self.table.put_item(
             Item=review
         )
-
 
 
 class ResvTable:
@@ -101,7 +108,7 @@ class ResvTable:
         :return: null
         """
         # todo what about the timestamp
-        resvid = (str)((int)(time.time()))
+        # resvid = (str)((int)(time.time()))
         new_record = {
             'resvid': resvid,
             'customer': customer,
@@ -121,19 +128,25 @@ class ResvTable:
         :param name: user name
         :return: barbershop item
         """
-        response = self.table.get_item(
-            Key={
-                'name': name
-            }
-        )
+        response = self.table.scan()
+
         latest_barbershop = None
-        if 'Item' in response:
-            # todo sort timestamp
-            latest_barbershop = response['Item']['barbershop_name']
+        latest_timestamp = -1
+        if 'Items' in response:
+            items = response['Items']
+            for item in items:
+                if item['customer'] == name and latest_timestamp < int(item['timestamp']):
+                    latest_timestamp = int(item['timestamp'])
+                    latest_barbershop = item['barbershop']
+
         return latest_barbershop
 
-    def get_reserve_record_by_customer(self, customer):
 
-    # todo return reservation items
+    def get_reserve_record_by_customer(self, customer):
+        # todo return reservation items
+        pass
+
+
     def get_reserve_record_by_barbershop(self, barbershop):
-# todo return barbershop
+        # todo return barbershop
+        pass
