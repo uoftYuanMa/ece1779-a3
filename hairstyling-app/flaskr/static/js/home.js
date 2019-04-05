@@ -93,12 +93,15 @@ function loadMarkers() {
     ret = null
     $.ajax({
         type: 'POST',
-        url: '/load_markers',
+        //url: 'https://qvwzdleh67.execute-api.us-east-1.amazonaws.com/dev/load_markers',
+        //headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        url: 'load_markers',
         data: '',
         contentType: false,
         cache: false,
         processData: false,
         async: false,
+        crossDomain: true,
         success: function(data) {
             ret = JSON.parse(data)
         }
