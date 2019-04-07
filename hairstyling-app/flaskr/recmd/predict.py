@@ -12,15 +12,13 @@ def get_feature_vector(item_name):
     :param item_name: barbershop name
     :return: feature vector
     """
+    #print(item_name)
     review_table_list = TrainTable().get_train_list('1')
     for item in review_table_list:
         review_table = item['list']
-    barbers_list=TrainTable().get_train_list('3')
-    for item in barbers_list:
-        barbers = item['list']
-    for b in len(barbers):
-        if barbers[b]==item_name:
-            return review_table[:,b]
+    review_table_arr=numpy.array(review_table)
+    #print(review_table_arr[:,item_name])
+    return review_table_arr[:,item_name]
 
 
 def get_user_ratings(user_name):
@@ -29,6 +27,7 @@ def get_user_ratings(user_name):
     :param user_name: user name
     :return: user ratings
     """
+    #print(user_name)
     review_table_list=TrainTable().get_train_list('1')
     for item in review_table_list:
         review_table=item['list']
@@ -54,7 +53,12 @@ def get_feature_dist(item1, item2):
     """
     fv1=get_feature_vector(item1)
     fv2=get_feature_vector(item2)
-    similarity = numpy.corrcoef(fv1, fv2)[0, 1]
+    #print(fv1)
+    #print(fv2)
+    if ((fv1.any()>0)&(fv2.any()>0)):
+        similarity = numpy.corrcoef(fv1, fv2)[0, 1]
+    else:
+        similarity=0
     return similarity
 
 
@@ -63,6 +67,7 @@ def get_unpurchased_item_prediction(user_ratings, item_unpurchased):
     purchased_item_ratings=user_ratings[item_purchased]
     item_similarities = numpy.zeros(item_purchased.shape[0])
     count = 0
+    #print(item_purchased)
     for i in item_purchased:
         item_similarities[count]=get_feature_dist(item_unpurchased, i)
         count = count+1
@@ -81,14 +86,15 @@ def get_recmd_list(user_name):
     user_ratings = get_user_ratings(user_name)
     item_unpurchased = numpy.where(user_ratings == 0)[0]
     predicted_ratings = numpy.zeros(user_ratings.shape[0])
+    #print(item_unpurchased)
     for i in item_unpurchased:
         predicted_ratings[i]=get_unpurchased_item_prediction(user_ratings, i)
-    recmd_list= numpy.where(predicted_ratings > 0)[0]
-    print(recmd_list)
+    recmd_list= numpy.where(predicted_ratings >= 0)[0]
+    #print(recmd_list)
     barbers_list = TrainTable().get_train_list('3')
     for item in barbers_list:
         barbers = item['list']
-    print(barbers)
+    #print(barbers)
     recommendation=[]
     count=0
     for i in recmd_list:
@@ -99,3 +105,4 @@ def get_recmd_list(user_name):
     return recommendation
 
 #get_recmd_list('liu')
+#get_feature_dist(2, 5)
