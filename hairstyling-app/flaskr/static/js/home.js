@@ -78,7 +78,7 @@ function initMap() {
         //console.log(markers[i]);
         console.log(markers[i].title)
         var contentString = '<div><p class="text-monospace font-weight-bold">' + markers[i].title + '</p>'
-                            +'<a class="btn btn-primary btn-sm" href="/barbershop?name=' + markers[i].name
+                            +'<a class="btn btn-primary btn-sm" href="https://ynybvknfjg.execute-api.us-east-1.amazonaws.com/dev/barbershop?name=' + markers[i].name
                             + '" role="button">Reserve</a></div>'
         var hairMarker = new google.maps.Marker({
             position: {lat: parseInt(markers[i].lat) / 10000.0, lng: parseInt(markers[i].long) / 10000.0},
@@ -93,15 +93,15 @@ function loadMarkers() {
     ret = null
     $.ajax({
         type: 'POST',
-        //url: 'https://qvwzdleh67.execute-api.us-east-1.amazonaws.com/dev/load_markers',
-        //headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-        url: 'load_markers',
+        url: 'https://ynybvknfjg.execute-api.us-east-1.amazonaws.com/dev/load_markers',
+        headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        crossDomain: true,
+        // url: 'load_markers',
         data: '',
         contentType: false,
         cache: false,
         processData: false,
         async: false,
-        crossDomain: true,
         success: function(data) {
             ret = JSON.parse(data)
         }

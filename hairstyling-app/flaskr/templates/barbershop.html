@@ -2,33 +2,84 @@
 
 {% block head %}
 <title>Barbershop</title>
-<link rel="stylesheet" href="static/css/barber.css">
+<link rel="stylesheet" href="static/css/barbershop.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="input-group col-md-7">
-        <input type="text" class="form-control" placeholder="Search" id="txtSearch"/>
-        <div class="input-group-btn">
-          <button class="btn btn-outline-dark" type="submit">
-              <i class="fas fa-search"></i>
-          </button>
-        </div>
+<div class="card border-secondary mb-3">
+      <table class="table table-borderless">
+          <tr>
+              <td>
+                <h5 class="card-title">{{ barbershop.title }}</h5>
+                <p class="card-text">Welcome our barbershop! Let's have a fresh-new hair style</p>
+                <a href="#" class="btn btn-info">{{ avg1 }}</a>
+                  {% for i in range(avg2) %}
+                    <i class="fas fa-star"></i>
+                  {% endfor %}
+                  {% for i in range(5 - avg2) %}
+                    <i class="far fa-star"></i>
+                  {% endfor %}
+              </td>
+                <td style="text-align: right">
+                    <img src="{{ barbershop.image }}" class="card-img-top barbershopImg">
+                </td>
+          </tr>
+      </table>
+</div>
+
+<p style="display:none" id="bbname">{{ barbershop.name }}</p>
+
+<div class="card border-secondary mb-3">
+    <div class="card-header">
+        Reservation
+    </div>
+    <div class="card-body">
+        <div id="msg"></div>
+        <button class="btn btn-success" id="resv_btn"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-secondary" id="refresh_btn"><i class="fas fa-sync-alt"></i></button>
+        <br><br>
+        <table id="resv_table" class="display">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Time</th>
+                    <th>Barber</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
-<br>
-<div class="row">
-    <div id="map" class="col-md-8"></div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header"></div>
-            <div class="card-body"></div>
-        </div>
-    </div>
+
+<div class="form-group">
+    <label for="reviewText">Review text</label>
+    <textarea class="form-control" id="reviewText" rows="3"></textarea>
 </div>
+<div class="form-group">
+    <label for="ratingOption">Rating</label>
+    <select class="form-control" id="ratingOption">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+</div>
+<button class="btn btn-warning" id="review_btn">submit</button>
+<div id="review_msg"></div>
+
+<br><br>
+<table class="row-border" id="review_table">
+
+</table>
+
 {% endblock %}
 
 
 {% block footer %}
-<script src="static/js/barber.js"></script>
+<script src="static/js/barbershop.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 {% endblock%}

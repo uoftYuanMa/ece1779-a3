@@ -2,7 +2,7 @@ import boto3
 
 import time
 from boto3.dynamodb.conditions import Key, Attr
-import datetime
+from datetime import datetime
 
 
 dynamodb = boto3.resource('dynamodb')
@@ -55,20 +55,14 @@ class BarberShopTable:
             barbershop = response['Item']
         return barbershop
 
-
     def get_all_barbershop(self):
-        response = self.table.scan(
-            TableName="barbershop"
-        )
-        items = response['Items']
-        return items
-    def get_all(self):
         response = self.table.scan()
         items = None
         if 'Items' in response:
             items = response['Items']
 
         return items
+
 
     def put_barbershop(self, name, password, title, image, lat, long):
 
@@ -78,7 +72,7 @@ class BarberShopTable:
             'title': title,
             'image': image,
             'lat': lat,
-            'long': long
+            'long': long,
         }
         self.table.put_item(
             Item=barbershop
@@ -114,9 +108,9 @@ class ReviewTable:
 
     def put_review_by_barbershop(self, customer, barbershop, timestamp, text, rating):
         # todo  to confirm about timestamp????
-        # reviewid = (str)((int)(time.time()))
+        reviewid = (str)((int)(time.time()))
         review = {
-            'resvid': reviewid,
+            'reviewid': reviewid,
             'customer': customer,
             'barbershop': barbershop,
             'timestamp': timestamp,
@@ -127,6 +121,29 @@ class ReviewTable:
             Item=review
         )
 
+    def put_review(self, customer_name, barbershop_name, text, rating):
+        timestamp = str(datetime.timestamp(datetime.now()))
+        reviewid = timestamp
+        review = {
+            'reviewid': reviewid,
+            'customer': customer_name,
+            'barbershop': barbershop_name,
+            'text': text,
+            'rating': rating,
+            'timestamp': timestamp
+        }
+        print(review)
+        self.table.put_item(
+            Item=review
+        )
+
+    def get_all_review(self):
+        response = self.table.scan()
+        items = None
+        if 'Items' in response:
+            items = response['Items']
+
+        return items
 
 class ResvTable:
     table = dynamodb.Table('resv')
@@ -185,27 +202,63 @@ class ResvTable:
         return latest_barbershop
 
 
+    def put_reserve(self, barbershop_name, barber, time_slot, price, customer_name):
+        resvid = str(datetime.timestamp(datetime.now()))
+        reserve = {
+            'resvid': resvid,
+            'timestamp': resvid,
+            'barbershop_name': barbershop_name,
+            'customer_name': customer_name,
+            'barber': barber,
+            'time_slot': time_slot,
+            'price': price
+        }
+        self.table.put_item(
+            Item=reserve
+        )
+
+    def put_reserve_new(self, item):
+        self.table.put_item(
+            Item=item
+        )
+
 
     def get_reserve_record_by_customer(self, customer):
-
         response = self.table.scan(
             TableName="resv"
         )
         items = response['Items']
         return items
 
-        # todo return reservation items
-
-
-    def get_reserve_record_by_barbershop(self, barbershop):
-
+    def get_reserve_record_by_barbershop(self, barbershop_name):
         response = self.table.query(
-            KeyConditionExpression=Key('barbershop').eq(barbershop),
+            KeyConditionExpression=Key('barbershop').eq(barbershop_name),
             ScanIndexForward=False
         )
         items = response['Items']
         return items
 
+    def get_all_reserve(self):
+        response = self.table.scan(
+            TableName="resv"
+        )
+        items = response['Items']
+        return items
+
+    def get_reserve(self, resvid):
+        print('get_reserve')
+        response = self.table.get_item(
+            Key={
+                'resvid': resvid,
+                'timestamp': resvid
+            }
+        )
+        print('get_reserve_after')
+        resv = None
+        if 'Item' in response:
+            resv = response['Item']
+        print(resv)
+        return resv
 
 
 class TrainTable:

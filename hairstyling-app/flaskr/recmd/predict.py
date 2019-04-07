@@ -96,6 +96,6 @@ def get_recmd_list(user_name):
             recommendation.append(barbers[i])
         count+=1
     print(recommendation)
-    return
+    return recommendation
 
 #get_recmd_list('liu')
