@@ -13,6 +13,7 @@ function loadHistoryTable() {
             "crossDomain": true,
         },
         "columns": [
+            {"data": 'Barbershop'},
             {"data": 'Time'},
             {"data": 'Barber'},
             {"data": 'Price'},

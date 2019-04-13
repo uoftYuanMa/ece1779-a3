@@ -33,6 +33,7 @@ def barbershop():
             traceback.print_tb(e.__traceback__)
             return render_template('error.html', msg='something goes wrong~')
 
+
 @app.route('/get_resv', methods=['GET', 'POST'])
 def get_resv():
     user = session['user'] if 'user' in session else None
@@ -89,6 +90,7 @@ def put_resv():
             traceback.print_tb(e.__traceback__)
             return "0"
 
+
 @app.route('/get_history', methods=['GET', 'POST'])
 def get_history():
     user = session['user'] if 'user' in session else None
@@ -108,7 +110,8 @@ def get_history():
                         'Time': Time,
                         'Barber': resv['barber'],
                         'Price': resv['price'],
-                        'Resvid': resv['resvid']
+                        'Resvid': resv['resvid'],
+                        'Barbershop': resv['barbershop_title']
                     })
             # print(res)
             return json.dumps({"data": res})
@@ -153,6 +156,7 @@ def get_review():
             print(e)
             traceback.print_tb(e.__traceback__)
             return None
+
 
 @app.route('/put_review', methods=['GET', 'POST'])
 def put_review():

@@ -24,11 +24,14 @@ def home():
 
             # get_recmd_list(session['user']['name'])
             # customer_name
-            rec = ['https://s3.amazonaws.com/ece1779-images/Hagen_Hair_And_Barber.png','https://s3.amazonaws.com/ece1779-images/N15_Hair_Salon.png',
+            rec_url = ['https://s3.amazonaws.com/ece1779-images/Hagen_Hair_And_Barber.png','https://s3.amazonaws.com/ece1779-images/N15_Hair_Salon.png',
                    'https://s3.amazonaws.com/ece1779-images/Crows_Nest_Barbershop.png']
-            return render_template('home.html', rec=rec)
+
+            rec_title = ['Hagen_Hair_And_Barber', 'N15_Hair_Salon', 'Crows_Nest_Barbershop']
+            return render_template('home.html', rec_url=rec_url, rec_title=rec_title)
 
         except Exception as e:
+            print(e)
             traceback.print_tb(e.__traceback__)
             return render_template('error.html', msg='something goes wrong~')
 

@@ -1,9 +1,10 @@
 body {
-    padding-top: 80px;
+    /*padding-top: 80px;*/
+    background-image: url('../img/bg.jpg');
 }
 
 .wide {
-    margin: 30px;
+    margin: 120px;
 }
 
 .img-small{

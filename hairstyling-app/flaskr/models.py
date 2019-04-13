@@ -202,12 +202,13 @@ class ResvTable:
         return latest_barbershop
 
 
-    def put_reserve(self, barbershop_name, barber, time_slot, price, customer_name):
+    def put_reserve(self, barbershop_name, barber, time_slot, price, customer_name, barbershop_title):
         resvid = str(datetime.timestamp(datetime.now()))
         reserve = {
             'resvid': resvid,
             'timestamp': resvid,
             'barbershop_name': barbershop_name,
+            'barbershop_title': barbershop_title,
             'customer_name': customer_name,
             'barber': barber,
             'time_slot': time_slot,

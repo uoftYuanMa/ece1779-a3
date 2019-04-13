@@ -1,31 +1,31 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>Barbershop</title>
+<title>Home</title>
 <link rel="stylesheet" href="static/css/barbershop.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 {% endblock %}
 
 {% block content %}
 <div class="card border-secondary mb-3">
-    <table class="table table-borderless">
-        <tr>
-            <td>
+      <table class="table table-borderless">
+          <tr>
+              <td>
                 <h5 class="card-title">{{ barbershop.title }}</h5>
                 <p class="card-text">Welcome our barbershop! Let's have a fresh-new hair style</p>
                 <a href="#" class="btn btn-info">{{ avg1 }}</a>
-                {% for i in range(avg2) %}
-                <i class="fas fa-star"></i>
-                {% endfor %}
-                {% for i in range(5 - avg2) %}
-                <i class="far fa-star"></i>
-                {% endfor %}
-            </td>
-            <td style="text-align: right">
-                <img src="{{ barbershop.image }}" class="card-img-top barbershopImg">
-            </td>
-        </tr>
-    </table>
+                  {% for i in range(avg2) %}
+                    <i class="fas fa-star"></i>
+                  {% endfor %}
+                  {% for i in range(5 - avg2) %}
+                    <i class="far fa-star"></i>
+                  {% endfor %}
+              </td>
+                <td style="text-align: right">
+                    <img src="{{ barbershop.image }}" class="card-img-top barbershopImg">
+                </td>
+          </tr>
+      </table>
 </div>
 
 <p style="display:none" id="bbname">{{ barbershop.name }}</p>
@@ -45,60 +45,37 @@
     </li>
 </ul>
 
-
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-reserve" role="tabpanel" aria-labelledby="pills-reserve-tab">
         <!--reserve...-->
-
         <div style="background-color:white">
-            <div id="msg"></div>
-            <button class="btn btn-success" id="resv_btn"><i class="fas fa-plus"></i></button>
-            <button class="btn btn-secondary" id="refresh_btn"><i class="fas fa-sync-alt"></i></button>
-            <br><br>
-            <table id="resv_table" class="display">
-                <thead>
+        <div id="msg"></div>
+        <table id="resv_table" class="display">
+            <thead>
                 <tr>
-                    <th></th>
+                    <th>Customer</th>
                     <th>Time</th>
                     <th>Barber</th>
                     <th>Price</th>
                 </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            </thead>
+            <tbody></tbody>
+        </table>
         </div>
-
     </div>
 
     <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
         <!--review...-->
-        <div style="background-color:white">
-            <div class="form-group">
-                <textarea class="form-control" id="reviewText" rows="3" placeholder="review text"></textarea>
-            </div>
-            <div class="form-group form-inline">
-                <p style="display: none" id="star-p">0</p>
-                <i id="star1" class="far fa-star"></i>
-                <i id="star2" class="far fa-star"></i>
-                <i id="star3" class="far fa-star"></i>
-                <i id="star4" class="far fa-star"></i>
-                <i id="star5" class="far fa-star"></i>
-            </div>
-            <button class="btn btn-warning" id="review_btn">submit</button>
-            <div id="review_msg"></div>
-            <br><br>
-            <table class="display" style="width:100%" id="review_table">
-                <tbody></tbody>
-            </table>
-        </div>
+        <table class="display" style="width:100%" id="review_table"></table>
     </div>
 </div>
+
 
 {% endblock %}
 
 
 {% block footer %}
-<script src="static/js/barbershop.js"></script>
+<script src="static/js/home_barbershop.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 {% endblock%}

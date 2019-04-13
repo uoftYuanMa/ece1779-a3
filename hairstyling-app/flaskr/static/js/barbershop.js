@@ -8,16 +8,60 @@ $(document).ready(function() {
     })
     loadReviewTable()
     $('#review_btn').on("click", function(){
-        addReview($('#bbname').html(), $('#reviewText').val(), $('#ratingOption').val())
+        addReview($('#bbname').html(), $('#reviewText').val(), $('#star-p').html())
         $('#review_table').DataTable().ajax.reload();
     })
+
+    $('#star1').on("click", function(){
+        $('#star-p').html('1');
+        $('#star1').attr('class', 'fas fa-star');
+        $('#star2').attr('class', 'far fa-star');
+        $('#star3').attr('class', 'far fa-star');
+        $('#star4').attr('class', 'far fa-star');
+        $('#star5').attr('class', 'far fa-star');
+    })
+
+    $('#star2').on("click", function(){
+        $('#star-p').html('2');
+        $('#star1').attr('class', 'fas fa-star');
+        $('#star2').attr('class', 'fas fa-star');
+        $('#star3').attr('class', 'far fa-star');
+        $('#star4').attr('class', 'far fa-star');
+        $('#star5').attr('class', 'far fa-star');
+    })
+
+    $('#star3').on("click", function(){
+        $('#star-p').html('3');
+        $('#star1').attr('class', 'fas fa-star');
+        $('#star2').attr('class', 'fas fa-star');
+        $('#star3').attr('class', 'fas fa-star');
+        $('#star4').attr('class', 'far fa-star');
+        $('#star5').attr('class', 'far fa-star');
+    })
+
+    $('#star4').on("click", function(){
+        $('#star-p').html('4');
+        $('#star1').attr('class', 'fas fa-star');
+        $('#star2').attr('class', 'fas fa-star');
+        $('#star3').attr('class', 'fas fa-star');
+        $('#star4').attr('class', 'fas fa-star');
+        $('#star5').attr('class', 'far fa-star');
+    })
+
+    $('#star5').on("click", function(){
+        $('#star-p').html('5');
+        $('#star1').attr('class', 'fas fa-star');
+        $('#star2').attr('class', 'fas fa-star');
+        $('#star3').attr('class', 'fas fa-star');
+        $('#star4').attr('class', 'fas fa-star');
+        $('#star5').attr('class', 'fas fa-star');
+    })
+
 });
 
 function loadResvTable() {
     var bbname = $('#bbname').html()
     $('#resv_table').DataTable({
-        "processing": true,
-        "serverSide": true,
         "ajax": {
             "url": "https://ynybvknfjg.execute-api.us-east-1.amazonaws.com/dev/get_resv",
             "data": {"bbname": bbname},
@@ -110,9 +154,21 @@ function loadReviewTable() {
                     for (var i=0;i<5-parseInt(full.Rating);i++) {
                         stars = stars + '<i class="far fa-star"></i>'
                     }
-                    return '<p>' + stars + '<br><br><br>'+full.Text+'</p>'
+                    return '<p>' + stars + '</p>'
                 }
             },
+            {
+                "render": function (data, type, full, meta) {
+                    stars = ''
+                    for (var i=0;i<parseInt(full.Rating);i++) {
+                        stars = stars + '<i class="fas fa-star"></i>'
+                    }
+                    for (var i=0;i<5-parseInt(full.Rating);i++) {
+                        stars = stars + '<i class="far fa-star"></i>'
+                    }
+                    return '<p>' + full.Text + '</p>'
+                }
+            }
 //            {"data": 'Customer'},
 //            {"data": 'Rating'},
 //            {"data": 'Text'},

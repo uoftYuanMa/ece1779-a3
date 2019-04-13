@@ -6,6 +6,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 from flaskr import home
+from flaskr import home_barbershop
+from flaskr import tryout
 from flaskr import barbershop
 from flaskr import login
 from flaskr import error

@@ -49,7 +49,7 @@ def load_resv():
     for barbershop in barbershops:
         a, b = get_rand_barbers()
         for i in range(8):
-            resv_table.put_reserve(barbershop['name'], a, str(i), get_rand_prices(), 'nobody')
+            resv_table.put_reserve(barbershop['name'], a, str(i), get_rand_prices(), 'nobody', barbershop['title'])
 
 if __name__ == '__main__':
     dirname = '/Users/liuwl/Documents/UoT/course/cloud computing/assignments/a3/pictures'

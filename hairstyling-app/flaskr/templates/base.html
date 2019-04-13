@@ -14,7 +14,10 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="">Online hair-styling</a>
+    <a class="navbar-brand" href="#">
+        <img src="static/img/barbershop.png" width="35" height="30" class="d-inline-block align-top" alt="">
+        Online hair-styling
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -22,24 +25,36 @@
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" id="nav-home">
+                {% if 'user' in session and session['user']['usertype'] == '0' %}
                 <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                {% else %}
+                <a class="nav-link" href="{{ url_for('home_barbershop') }}">Home <span class="sr-only">(current)</span></a>
+                {% endif %}
             </li>
-            <!--<li class="nav-item" id="nav-explore">-->
-                <!--<a class="nav-link" href="#">Explore</a>-->
-            <!--</li>-->
+            {% if 'user' in session and session['user']['usertype'] == '0' %}
+            <li class="nav-item" id="nav-tryout">
+                <a class="nav-link" href="{{ url_for('tryout') }}">Tryout</a>
+            </li>
+            {% endif %}
         </ul>
         {% if 'user' in session %}
 
         <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="far fa-user"></i>
+                {% if session['user']['usertype'] == '0' %}
                 <span class="navbar-text">{{ session['user']['name'] }}</span>
+                {% else %}
+                <span class="navbar-text">{{ session['user']['title']}}</span>
+                {% endif %}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                {% if session['user']['usertype'] == '0' %}
                 <a class="dropdown-item" href="{{ url_for('history') }}">
                     History
                     <i class="fas fa-history"></i>
                 </a>
+                {% endif %}
                 <a class="dropdown-item" href="{{ url_for('logout') }}">
                     Logout
                     <i class="fas fa-sign-out-alt"></i></a>
