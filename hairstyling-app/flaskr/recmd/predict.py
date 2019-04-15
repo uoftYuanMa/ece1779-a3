@@ -100,9 +100,10 @@ def get_recmd_list(user_name):
     for i in recmd_list:
         if count<5:
             recommendation.append(barbers[i])
-        count+=1
-    print(recommendation)
+        count += 1
+    # print(recommendation)
     return recommendation
 
-#get_recmd_list('liu')
-#get_feature_dist(2, 5)
+# get_recmd_list('liu')
+# get_recmd_list('123')
+# get_feature_dist(2, 5)
