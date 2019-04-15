@@ -48,49 +48,45 @@ function showAlert(msg, type, flag) {
 function loadReviewTable() {
     var bbname = $('#bbname').html()
     console.log(bbname)
-    $('#review_table').DataTable({
-        "ajax": {
-            "url": "https://ynybvknfjg.execute-api.us-east-1.amazonaws.com/dev/get_barbershop_review",
-            "data": {"bbname": bbname},
-            "type": "POST",
-            // "headers": {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            "crossDomain": true,
-        },
-        "columns": [
-            {
-                "render": function (data, type, full, meta) {
-                    return '<p><i class="far fa-user"></i>'+full.Customer+'</p>'
+    $('#review_table').html('')
+    $.ajax({
+        type: 'POST',
+        url: 'https://ynybvknfjg.execute-api.us-east-1.amazonaws.com/dev/get_barbershop_review',
+        //url: '/get_barbershop_review',
+        headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        data: bbname,
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: false,
+        crossDomain: true,
+        success: function(data) {
+            var reviewDiv1 = "<div class='media'>" +
+                            "<img class='d-flex rounded-circle avatar z-depth-1-half mr-3'" +
+                            "src='static/img/default.jpg' style:'weight:50%; height:50%'>" +
+                            "<div class='media-body'><h5 class='mt-0 font-weight-bold blue-text'>"
+            var reviewDiv2 = "</h5>"
+            var reviewDiv3 = "</div></div><br>"
+            var empthStar = ""
+
+            var reviews = JSON.parse(data)['data']
+            console.log(reviews)
+            var reviewsDiv = ''
+            for (var i=0; i < reviews.length; i++) {
+                stars = ""
+                for (var j=0;j<parseInt(reviews[i]['Rating']);j++) {
+                    stars = stars + "<i class='fas fa-star'></i>"
                 }
-            },
-            {
-                "render": function (data, type, full, meta) {
-                    stars = ''
-                    for (var i=0;i<parseInt(full.Rating);i++) {
-                        stars = stars + '<i class="fas fa-star"></i>'
-                    }
-                    for (var i=0;i<5-parseInt(full.Rating);i++) {
-                        stars = stars + '<i class="far fa-star"></i>'
-                    }
-                    return '<p>' + stars + '</p>'
+                for (var j=0;j<5-parseInt(reviews[i]['Rating']);j++) {
+                    stars = stars + "<i class='far fa-star'></i>"
                 }
-            },
-            {
-                "render": function (data, type, full, meta) {
-                    stars = ''
-                    for (var i=0;i<parseInt(full.Rating);i++) {
-                        stars = stars + '<i class="fas fa-star"></i>'
-                    }
-                    for (var i=0;i<5-parseInt(full.Rating);i++) {
-                        stars = stars + '<i class="far fa-star"></i>'
-                    }
-                    return '<p>' + full.Text + '</p>'
-                }
-            },
-        ],
-        "pageLength": 8,
-        "bLengthChange": false,
-        "searching": false
+                stars = "<p>" + stars + "</p>"
+                reviewsDiv += reviewDiv1 + reviews[i]['Customer'] + reviewDiv2 + stars + reviews[i]['Text'] + reviewDiv3
+            }
+            $('#review_table').html(reviewsDiv);
+        }
     });
 }
+
 
 

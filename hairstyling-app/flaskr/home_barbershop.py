@@ -22,7 +22,7 @@ def home_barbershop():
                     total += int(review['rating'])
                     count += 1
             if count != 0:
-                avg1 = total / count
+                avg1 = round(total / count, 1)
                 avg2 = total // count
             else:
                 avg1 = 0
@@ -73,7 +73,7 @@ def get_barbershop_review():
         return redirect(url_for('login'))
     else:
         try:
-            barbershop_name = request.form['bbname']
+            barbershop_name = request.data.decode('utf-8')
             review_table = models.ReviewTable()
             reviews = review_table.get_all_review()
 
