@@ -26,9 +26,7 @@ def home():
                 barbershop_list.append(barbershop_table.get_barbershop(barbershop_name))
             print(barbershop_list)
 
-            if flag:
-                pass
-            else:
+            if not flag:
                 barbershop_list = [
                     {
                         "name": '9l49YhGNTw6V93X0Sismkg==',
@@ -46,7 +44,8 @@ def home():
                         "image": 'https://s3.amazonaws.com/ece1779-images/Crows_Nest_Barbershop.png'
                     }
                 ]
-                return render_template('home.html', barbershop_list=barbershop_list)
+
+            return render_template('home.html', barbershop_list=barbershop_list)
 
         except Exception as e:
             print(e)
