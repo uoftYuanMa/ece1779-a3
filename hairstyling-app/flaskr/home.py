@@ -1,6 +1,7 @@
 from flask import render_template, url_for, session, redirect
 from flaskr import app
 from flaskr import models
+from flaskr.recmd.predict import *
 import traceback
 import json
 
@@ -13,20 +14,41 @@ def home():
     else:
         try:
             customer_name = session['user']['name']
+            barbershop_name_list = get_recmd_list(customer_name)
+            barbershop_table = models.BarberShopTable()
+            barbershop_list = []
+            flag = True
+            for barbershop_name in barbershop_name_list:
+                res = barbershop_table.get_barbershop(barbershop_name)
+                if not res:
+                    flag = False
+                    break
+                barbershop_list.append(barbershop_table.get_barbershop(barbershop_name))
+            print(barbershop_list)
 
-            # get_latest_visited barbershop by the user
-            resv_table = models.ResvTable()
-            latest_barbershop_name = resv_table.get_latest_barbershop(customer_name)
-            latest_barbershop = None
-            if latest_barbershop_name:
-                barbershop_table = models.BarberShopTable()
-                latest_barbershop = barbershop_table.get_barbershop(latest_barbershop_name)
+            if not flag:
+                barbershop_list = [
+                    {
+                        "name": '9l49YhGNTw6V93X0Sismkg==',
+                        "title": 'Hagen_Hair_And_Barber',
+                        "image": 'https://s3.amazonaws.com/ece1779-images/Hagen_Hair_And_Barber.png'
+                    },
+                    {
+                        "name": 'HekSa7uaRnqVOPm0VdGhNQ==',
+                        "title": 'N15_Hair_Salon',
+                        "image": 'https://s3.amazonaws.com/ece1779-images/N15_Hair_Salon.png'
+                    },
+                    {
+                        "name": "iiZ-MKZOTECxziKXyY-naQ==",
+                        "title": 'Crows_Nest_Barbershop',
+                        "image": 'https://s3.amazonaws.com/ece1779-images/Crows_Nest_Barbershop.png'
+                    }
+                ]
 
-            # get_recmd_list(session['user']['name'])
-
-            return render_template('home.html', latest_barshop_name=latest_barbershop)
+            return render_template('home.html', barbershop_list=barbershop_list)
 
         except Exception as e:
+            print(e)
             traceback.print_tb(e.__traceback__)
             return render_template('error.html', msg='something goes wrong~')
 
@@ -34,6 +56,6 @@ def home():
 @app.route('/load_markers', methods=['GET', 'POST'])
 def load_markers():
     barbershop_table = models.BarberShopTable()
-    barbershops = barbershop_table.get_all()
-    print(barbershops)
+    barbershops = barbershop_table.get_all_barbershop()
+    # print(barbershops)
     return json.dumps(barbershops)

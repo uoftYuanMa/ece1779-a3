@@ -33,24 +33,34 @@ def login():
                 user = customer_table.get_customer(username)
             else:
                 barbershop_table = BarberShopTable()
-                user = barbershop_table.get_barbershop()
+                user = barbershop_table.get_barbershop(username)
 
             if not user:
                 valid = False
                 message = "name or password does not exist"
-            else:
+            elif usertype == '0':
                 salt = user['salt']
                 password_hash = hash_password(salt, password)
                 if password_hash != user['password']:
                     valid = False
-                    message = "name or password doest not exist"
+                    message = "name or password does not exist"
+            else:
+                if user['password'] != username:
+                    valid = False
+                    message = "name or password does not exist"
 
             if valid:
                 session['user'] = {
                     'name': user['name'],
-                    'usertype': user['usertype']
+                    'usertype': usertype,
+                    'title': user['title'] if 'title' in user else None
                 }
-                return redirect(url_for('home'))
+
+                if usertype == '0':
+                    return redirect(url_for('home'))
+                else:
+                    # obtain information
+                    return redirect(url_for('home_barbershop'))
             else:
                 flash(message)
 

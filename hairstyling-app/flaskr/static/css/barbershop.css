@@ -1,0 +1,16 @@
+.barbershopImg {
+    width: 200px;
+    height: 200px;
+    vertical-align:middle;
+    text-align:right;
+}
+
+.media .avatar {
+    width: 64px;
+}
+.shadow-textarea textarea.form-control::placeholder {
+    font-weight: 300;
+}
+.shadow-textarea textarea.form-control {
+    padding-left: 0.8rem;
+}
